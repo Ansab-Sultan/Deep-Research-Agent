@@ -1,0 +1,310 @@
+@import "tailwindcss";
+
+html, body, #__next, main {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+:root {
+  --background: #f5efe3;
+  --surface-raised: color-mix(in srgb, #fffdf9 92%, #f2e8d7 8%);
+  --surface-subtle: #f1e8d7;
+  --surface-highlight: #f7efe1;
+  --surface-paper: #fffcf8;
+  --text: #40342d;
+  --text-strong: #241916;
+  --text-muted: #6e6257;
+  --border-subtle: rgba(68, 48, 38, 0.09);
+  --border-strong: rgba(68, 48, 38, 0.16);
+  --accent: #8b4a28;
+  --accent-strong: #6d3718;
+  --accent-soft: rgba(139, 74, 40, 0.1);
+  --accent-border: rgba(139, 74, 40, 0.24);
+  --accent-foreground: #fff8f0;
+  --success: #1f6b56;
+  --success-soft: rgba(31, 107, 86, 0.1);
+  --success-border: rgba(31, 107, 86, 0.22);
+  --warning: #916219;
+  --warning-soft: rgba(145, 98, 25, 0.11);
+  --warning-border: rgba(145, 98, 25, 0.22);
+  --error: #9d3f38;
+  --error-dark: #7d322c;
+  --error-soft: rgba(157, 63, 56, 0.12);
+  --error-border: rgba(157, 63, 56, 0.22);
+  --accent-dark: #6d3718;
+  --focus-ring: rgba(139, 74, 40, 0.18);
+  --hero-top: rgba(255, 255, 255, 0.56);
+  --hero-glow: rgba(201, 145, 82, 0.26);
+  --overlay: rgba(31, 21, 16, 0.08);
+  --shadow-soft: 0 16px 40px rgba(70, 45, 31, 0.08);
+  --shadow-panel: 0 28px 90px rgba(45, 28, 17, 0.18);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--text);
+  --font-sans: var(--font-manrope);
+  --font-display: var(--font-fraunces);
+}
+
+:root[data-theme="dark"] {
+  --background: #100d10;
+  --surface-raised: rgba(31, 24, 27, 0.88);
+  --surface-subtle: #181317;
+  --surface-highlight: #211920;
+  --surface-paper: #161215;
+  --text: #e6ddd7;
+  --text-strong: #f6ede7;
+  --text-muted: #9f938a;
+  --border-subtle: rgba(255, 242, 233, 0.08);
+  --border-strong: rgba(255, 242, 233, 0.14);
+  --accent: #d59b6d;
+  --accent-strong: #f2b385;
+  --accent-soft: rgba(213, 155, 109, 0.12);
+  --accent-border: rgba(213, 155, 109, 0.24);
+  --accent-foreground: #130e0b;
+  --success: #78d0b4;
+  --success-soft: rgba(120, 208, 180, 0.12);
+  --success-border: rgba(120, 208, 180, 0.22);
+  --warning: #efc169;
+  --warning-soft: rgba(239, 193, 105, 0.12);
+  --warning-border: rgba(239, 193, 105, 0.22);
+  --error: #f39189;
+  --error-dark: #ffb5af;
+  --error-soft: rgba(243, 145, 137, 0.14);
+  --error-border: rgba(243, 145, 137, 0.24);
+  --accent-dark: #f2b385;
+  --focus-ring: rgba(213, 155, 109, 0.2);
+  --hero-top: rgba(65, 44, 29, 0.2);
+  --hero-glow: rgba(213, 155, 109, 0.15);
+  --overlay: rgba(0, 0, 0, 0.34);
+  --shadow-soft: 0 20px 48px rgba(0, 0, 0, 0.32);
+  --shadow-panel: 0 32px 90px rgba(0, 0, 0, 0.52);
+}
+
+html {
+  background: var(--background);
+  color: var(--text);
+  color-scheme: light;
+  scroll-behavior: smooth;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--background);
+  color: var(--text);
+  font-family: var(--font-manrope), sans-serif;
+}
+
+* {
+  border-color: var(--border-subtle);
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--text-strong);
+}
+
+.glass-panel {
+  background: color-mix(in srgb, var(--surface-raised) 92%, transparent);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(18px);
+}
+
+.report-markdown {
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.9;
+}
+
+.report-markdown > * + * {
+  margin-top: 1.25rem;
+}
+
+.report-markdown p,
+.report-markdown li {
+  color: var(--text);
+}
+
+.report-markdown ul,
+.report-markdown ol {
+  padding-left: 1.4rem;
+}
+
+.report-markdown li + li {
+  margin-top: 0.4rem;
+}
+
+.report-markdown hr {
+  border: 0;
+  border-top: 1px solid var(--border-subtle);
+  margin: 2rem 0;
+}
+
+.report-markdown pre {
+  overflow-x: auto;
+}
+
+/* Improved Theme-Aware Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: 10px;
+  transition: background 0.2s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-border);
+}
+
+/* Ensure all buttons and interactive elements have pointer cursor */
+button, 
+[role="button"],
+select,
+summary {
+  cursor: pointer !important;
+}
+
+/* Firefox Support */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-subtle) transparent;
+}
+
+.report-markdown table th,
+.report-markdown table td {
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 0.75rem;
+}
+
+.report-markdown table th {
+  color: var(--text-strong);
+  font-weight: 700;
+}
+
+button,
+a,
+summary,
+input,
+textarea,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+summary,
+a {
+  touch-action: manipulation;
+}
+
+:focus-visible {
+  outline: 0;
+  box-shadow: 0 0 0 4px var(--focus-ring);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Markdown Styles */
+.report-markdown {
+  color: var(--text);
+  line-height: 1.7;
+}
+
+.report-markdown h1 {
+  font-size: 2.25rem;
+  font-weight: 800;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: var(--accent);
+}
+
+.report-markdown h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 1.75rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--accent-soft);
+}
+
+.report-markdown h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.report-markdown p {
+  margin-bottom: 1.25rem;
+}
+
+.report-markdown ul, .report-markdown ol {
+  margin-bottom: 1.25rem;
+  padding-left: 1.5rem;
+}
+
+.report-markdown ul {
+  list-style-type: disc;
+}
+
+.report-markdown ol {
+  list-style-type: decimal;
+}
+
+.report-markdown li {
+  margin-bottom: 0.5rem;
+}
+
+.report-markdown strong {
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.report-markdown em {
+  font-style: italic;
+}
+
+.report-markdown a {
+  color: var(--accent);
+  text-decoration: underline;
+  transition: opacity 0.2s;
+}
+
+.report-markdown a:hover {
+  opacity: 0.8;
+}
+
+.report-markdown blockquote {
+  border-left: 4px solid var(--accent-soft);
+  padding-left: 1rem;
+  font-style: italic;
+  margin-bottom: 1.25rem;
+}

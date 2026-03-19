@@ -1,0 +1,4 @@
+.env
+.venv
+.pytest_cache
+deeep_research_agent_backend.egg-info
