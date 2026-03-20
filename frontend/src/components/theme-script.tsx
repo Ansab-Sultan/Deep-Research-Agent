@@ -1,3 +1,5 @@
+import Script from "next/script";
+
 const themeScript = `
 (() => {
   const storageKey = "deep-research-theme";
@@ -10,5 +12,5 @@ const themeScript = `
 `;
 
 export function ThemeScript() {
-  return <script dangerouslySetInnerHTML={{ __html: themeScript }} />;
+  return <Script id="theme-script" strategy="beforeInteractive" dangerouslySetInnerHTML={{ __html: themeScript }} />;
 }

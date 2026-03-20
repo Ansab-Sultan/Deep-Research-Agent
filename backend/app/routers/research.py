@@ -54,6 +54,12 @@ async def get_chunks(job_id: str, request: Request) -> list[dict]:
     return await service.get_chunks(job_id)
 
 
+@router.get("/research/{job_id}/chunks/{chunk_id}")
+async def get_chunk(job_id: str, chunk_id: str, request: Request) -> dict:
+    service = request.app.state.followup_service
+    return await service.get_chunk(job_id, chunk_id)
+
+
 @router.get("/jobs", response_model=list[JobListItem])
 async def list_jobs(request: Request) -> list[JobListItem]:
     service = request.app.state.research_service

@@ -141,7 +141,7 @@ export function ResearchForm({ composer, isSubmitting, onCompose, onSubmit }: Re
               whileTap={{ scale: 0.98 }}
               type="submit"
               disabled={isSubmitting || composer.topic.trim().length < 3}
-              className="w-full lg:w-auto min-h-[64px] inline-flex items-center justify-center gap-3 rounded-full bg-[var(--accent)] px-12 py-4 text-sm font-bold text-white uppercase tracking-[0.2em] shadow-[0_20px_40px_rgba(139,74,40,0.2)] transition-all hover:bg-[var(--accent-strong)] disabled:cursor-not-allowed disabled:opacity-40 disabled:translate-y-0 disabled:shadow-none"
+              className="w-full lg:w-auto min-h-[64px] inline-flex items-center justify-center gap-3 rounded-full bg-[var(--accent)] px-12 py-4 text-sm font-bold text-[var(--accent-foreground)] uppercase tracking-[0.2em] shadow-[0_20px_40px_rgba(139,74,40,0.2)] transition-all hover:bg-[var(--accent-strong)] disabled:cursor-not-allowed disabled:opacity-40 disabled:translate-y-0 disabled:shadow-none"
             >
               {isSubmitting ? (
                 <>

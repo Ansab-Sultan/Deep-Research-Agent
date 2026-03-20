@@ -148,6 +148,13 @@ class RAGService:
             )
         return fallback_rows
 
+    async def get_chunk(self, job_id: str, chunk_id: str, chunk_hints: list[dict] | None = None) -> dict | None:
+        chunks = await self.get_chunks(job_id=job_id, chunk_hints=chunk_hints)
+        for chunk in chunks:
+            if chunk.get("chunk_id") == chunk_id:
+                return chunk
+        return None
+
     def _load_all_chunks_from_qdrant(self, collection_name: str) -> list[dict]:
         # In-memory client path.
         if hasattr(self._qdrant, "list_chunks"):
@@ -176,6 +183,7 @@ class RAGService:
     async def answer_followup(self, job_id: str, question: str) -> FollowUpOutput:
         query_vector = self._embedder.embed_text(question)
         collection_name = f"report_{job_id}"
+        log = logger("service.rag", job_id=job_id)
 
         if hasattr(self._qdrant, "query_points"):
             response = self._qdrant.query_points(
@@ -193,8 +201,8 @@ class RAGService:
                 with_payload=True,
             )
 
-        logger("service.rag", job_id=job_id).info(
-            "Retrieved %s chunks for follow-up",
+        log.info(
+            "Retrieved %s chunks for follow-up retrieval",
             len(results),
         )
 
@@ -205,6 +213,13 @@ class RAGService:
             }
             for row in results
         ]
+
+        log.info(
+            "Invoking follow-up inference with %s retrieved chunks (chunk_ids=%s, question_chars=%s)",
+            len(context_chunks),
+            ",".join(chunk["chunk_id"] for chunk in context_chunks) or "-",
+            len(question),
+        )
 
         context_str = "\n\n".join([f"[{c['chunk_id']}]: {c['text']}" for c in context_chunks])
 

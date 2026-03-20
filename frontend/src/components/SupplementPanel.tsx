@@ -5,7 +5,7 @@ import type { ChunkRecord, ReportDetail } from "@/lib/types";
 import { formatDateTime, truncate } from "@/lib/format";
 import { ToneBadge } from "./ToneBadge";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface SupplementPanelProps {
@@ -27,6 +27,12 @@ export function SupplementPanel({
 }: SupplementPanelProps) {
   const [activeTab, setActiveTab] = useState<Tab>("sources");
 
+  useEffect(() => {
+    if (activeCitedChunkIds && activeCitedChunkIds.length > 0) {
+      setActiveTab("chunks");
+    }
+  }, [activeCitedChunkIds]);
+
   const tabs: { id: Tab; label: string; icon: LucideIcon }[] = [
     { id: "sources", label: "Sources", icon: BookOpen },
     { id: "chunks", label: "Evidence", icon: Database },
@@ -39,7 +45,7 @@ export function SupplementPanel({
   };
 
   return (
-    <section className="glass-panel flex flex-col h-[600px] xl:h-[calc(100vh-280px)] rounded-[28px] overflow-hidden shadow-xl border border-[var(--border-subtle)]">
+    <section id="supplement-panel" className="glass-panel flex flex-col h-[600px] xl:h-[calc(100vh-280px)] rounded-[28px] overflow-hidden shadow-xl border border-[var(--border-subtle)]">
       <nav className="flex items-center border-b border-[var(--border-subtle)] bg-[var(--surface-subtle)]/30">
         {tabs.map((tab) => (
           <button
@@ -152,7 +158,7 @@ export function SupplementPanel({
                         {cited && <ToneBadge label="Verified" tone="running" />}
                       </div>
                       <p className="text-xs leading-6 text-[var(--text-muted)] opacity-80 line-clamp-3 italic bg-[var(--surface-subtle)]/40 p-3 rounded-xl border border-[var(--border-subtle)]/30">
-                        &quot;{truncate(chunk.text.replace(/\s+/g, " "), 220)}&quot;
+                        &quot;{truncate((chunk.text || "").replace(/\s+/g, " "), 220)}&quot;
                       </p>
                     </motion.button>
                   );

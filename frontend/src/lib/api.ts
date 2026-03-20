@@ -90,6 +90,10 @@ export async function getChunks(jobId: string): Promise<ChunkRecord[]> {
   return fetchJson<ChunkRecord[]>(`/research/${jobId}/chunks`);
 }
 
+export async function getChunk(jobId: string, chunkId: string): Promise<ChunkRecord> {
+  return fetchJson<ChunkRecord>(`/research/${jobId}/chunks/${chunkId}`);
+}
+
 export async function submitResearch(payload: ResearchRequest): Promise<ResearchResponse> {
   return fetchJson<ResearchResponse>("/research", {
     method: "POST",

@@ -117,6 +117,8 @@ class EmbeddingGateway:
         return [self._deterministic_embedding(t) for t in text_list]
 
     def embed_text(self, text: str) -> list[float]:
+        provider = self._settings.embedding_model if self._model is not None else "deterministic-fallback"
+        self._log.info("Embedding query text using %s (chars=%s)", provider, len(text))
         return self.embed_texts([text])[0]
 
     def _deterministic_embedding(self, text: str) -> list[float]:

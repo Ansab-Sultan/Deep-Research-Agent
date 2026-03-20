@@ -27,3 +27,11 @@ class FollowUpService:
         report = await self._history.get_report_detail(job_id)
         metadata = report.get("chunks", [])
         return await self._rag.get_chunks(job_id=job_id, chunk_hints=metadata)
+
+    async def get_chunk(self, job_id: str, chunk_id: str) -> dict:
+        report = await self._history.get_report_detail(job_id)
+        metadata = report.get("chunks", [])
+        chunk = await self._rag.get_chunk(job_id=job_id, chunk_id=chunk_id, chunk_hints=metadata)
+        if chunk is None:
+            raise NotFoundError("CHUNK_NOT_FOUND", f"Chunk {chunk_id} was not found for report {job_id}")
+        return chunk

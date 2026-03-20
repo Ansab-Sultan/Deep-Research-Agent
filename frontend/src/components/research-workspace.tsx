@@ -19,6 +19,7 @@ import {
   FrontendApiError,
   buildStreamUrl,
   deleteJob,
+  getChunk,
   getChunks,
   getHealth,
   getJobDetail,
@@ -326,7 +327,7 @@ const markdownComponents: Components = {
   h1(props) {
     const text = String(props.children);
     return (
-      <h1 id={slugifyHeading(text)} className="font-[family:var(--font-display)] text-4xl font-bold tracking-tight text-[var(--text-strong)] mt-12 mb-6">
+      <h1 id={slugifyHeading(text)} className="font-[family:var(--font-display)] text-4xl font-bold tracking-tight text-[var(--text-strong)] first:mt-0 mt-8 mb-6">
         {props.children}
       </h1>
     );
@@ -412,10 +413,13 @@ export function ResearchWorkspace({ initialJobId }: { initialJobId?: string }) {
       dispatch({ type: "job/upsert", job: detail });
 
       if (detail.status === "complete" || detail.has_persisted_report) {
-        const [report, chunks] = await Promise.all([getReportDetail(jobId), getChunks(jobId)]);
+        const report = await getReportDetail(jobId);
         dispatch({ type: "report/loaded", report });
-        dispatch({ type: "chunks/loaded", chunks });
         dispatch({ type: "stream/state", value: "closed" });
+        // Fetch chunks independently so a Qdrant failure doesn't block the report.
+        getChunks(jobId)
+          .then((chunks) => dispatch({ type: "chunks/loaded", chunks }))
+          .catch((err) => console.warn("chunks load failed", err));
       }
     } catch (error) {
       if (error instanceof FrontendApiError && error.status === 404) {
@@ -552,38 +556,7 @@ export function ResearchWorkspace({ initialJobId }: { initialJobId?: string }) {
 
   return (
     <main className="h-screen overflow-hidden bg-[var(--background)] text-[var(--text)] selection:bg-[var(--accent-soft)] flex flex-col">
-      {/* Infrastructure Health Banner */}
-      <div className={`
-        flex items-center justify-center gap-6 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.25em] transition-all border-b z-[200] backdrop-blur-md
-        ${state.health?.status === "ok" 
-          ? "bg-[var(--success-soft)] border-[var(--success-border)] text-[var(--success)]" 
-          : "bg-[var(--error-soft)] border-[var(--error-border)] text-[var(--error)]"}
-      `}>
-        <div className="flex items-center gap-2.5">
-          <div className={`h-1.5 w-1.5 rounded-full ${state.health?.status === "ok" ? "bg-[var(--success)] animate-pulse shadow-[0_0_8px_var(--success)]" : "bg-[var(--error)] shadow-[0_0_8px_var(--error)]"}`} />
-          <span>
-            {state.healthError 
-              ? `Backend Connection Error: ${state.healthError}` 
-              : `System Status: ${state.health?.status || "Connecting..."}`}
-          </span>
-        </div>
-        {state.health && (
-          <div className="hidden lg:flex items-center gap-8">
-            {Object.entries(state.health.services).map(([service, data]) => (
-              <div key={service} className="flex items-center gap-2 group cursor-help transition-opacity hover:opacity-100">
-                <span className="capitalize text-[var(--text-muted)] group-hover:text-[var(--text-strong)] transition-colors">{service}</span>
-                <span className={`px-2 py-0.5 rounded-full text-[8px] border ${
-                  data.status === "ok" 
-                    ? "bg-[var(--success-soft)] border-[var(--success-border)] text-[var(--success)] opacity-70" 
-                    : "bg-[var(--error-soft)] border-[var(--error-border)] text-[var(--error)]"
-                }`}>
-                  {data.status === "ok" ? "ACTIVE" : "DOWN"}
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+      {/* Infrastructure Health Banner Removed */}
 
       {/* Dynamic Background Elements */}
       <div className="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_30%_20%,_var(--hero-glow),_transparent_40%)] opacity-30" />
@@ -613,7 +586,7 @@ export function ResearchWorkspace({ initialJobId }: { initialJobId?: string }) {
                dispatch({ type: "select", jobId: id });
                setIsHomeView(false);
                setMobileSidebarOpen(false);
-               router.push(`/jobs/${id}`);
+               window.history.pushState(null, '', `/jobs/${id}`);
             }}
             onDeleteJob={handleDelete}
             onSetFilter={(f) => dispatch({ type: "filter/set", filter: f })}
@@ -621,7 +594,7 @@ export function ResearchWorkspace({ initialJobId }: { initialJobId?: string }) {
               dispatch({ type: "select", jobId: null });
               setIsHomeView(true);
               setMobileSidebarOpen(false);
-              router.push("/");
+              window.history.pushState(null, '', `/`);
             }}
           />
         </div>
@@ -668,7 +641,7 @@ export function ResearchWorkspace({ initialJobId }: { initialJobId?: string }) {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.2 }}
-                  className="h-full"
+                  className="h-full overflow-y-auto custom-scrollbar pr-2"
                 >
                   <ResearchForm
                     composer={composer}
@@ -699,7 +672,17 @@ export function ResearchWorkspace({ initialJobId }: { initialJobId?: string }) {
                         isSubmittingFollowup={state.isSubmittingFollowup}
                         onSetFollowupQuestion={setFollowupQuestion}
                         onFollowupSubmit={handleFollowupSubmit}
-                        onHighlightEvidence={(ids) => dispatch({ type: "cited/set", chunkIds: ids })}
+                        onHighlightEvidence={async (ids) => {
+                          dispatch({ type: "cited/set", chunkIds: ids });
+                          if (ids.length > 0 && state.selectedJobId) {
+                            try {
+                              const fetched = await Promise.all(ids.map(id => getChunk(state.selectedJobId!, id)));
+                              dispatch({ type: "chunks/loaded", chunks: fetched });
+                            } catch (error) {
+                              console.error(error);
+                            }
+                          }
+                        }}
                       />
                     </div>
                     
@@ -714,7 +697,17 @@ export function ResearchWorkspace({ initialJobId }: { initialJobId?: string }) {
                         chunks={state.chunks}
                         activeCitedChunkIds={state.activeCitedChunkIds}
                         onSelectChunk={(id) => dispatch({ type: "cited/set", chunkIds: [id] })}
-                        onHighlightEvidence={(ids) => dispatch({ type: "cited/set", chunkIds: ids })}
+                        onHighlightEvidence={async (ids) => {
+                          dispatch({ type: "cited/set", chunkIds: ids });
+                          if (ids.length > 0 && state.selectedJobId) {
+                            try {
+                              const fetched = await Promise.all(ids.map(id => getChunk(state.selectedJobId!, id)));
+                              dispatch({ type: "chunks/loaded", chunks: fetched });
+                            } catch (error) {
+                              console.error(error);
+                            }
+                          }
+                        }}
                       />
                     </div>
                   </div>
