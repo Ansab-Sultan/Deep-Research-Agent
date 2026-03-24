@@ -33,6 +33,23 @@ cd Deep-Research-Agent
 cp backend/.env.example backend/.env  # Make sure to configure your API keys!
 ```
 
+#### Environment Variables Setup
+
+Open `backend/.env` and configure the following essential keys:
+
+- **LLM Configuration:**
+  - `GEMINI_API_KEY`: Get your key from [Google AI Studio](https://aistudio.google.com/).
+  - `GEMINI_MODEL`: Default is `gemini-3.1-flash-lite-preview`.
+
+- **Search Tool:**
+  - `TAVILY_API_KEY`: Required for web search capabilities. Get it from [Tavily](https://tavily.com/).
+
+- **Database URLs (Default values work for local Docker setup):**
+  - `MONGODB_URL`: `mongodb://localhost:27017`
+  - `REDIS_URL`: `redis://localhost:6379/0`
+  - `QDRANT_URL`: `http://localhost:6333`
+
+
 ### 2. Services Startup (Qdrant Vector Database)
 
 The backend relies on Qdrant. Start it using Docker Compose:
