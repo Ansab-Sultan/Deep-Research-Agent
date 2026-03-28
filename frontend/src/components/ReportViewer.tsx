@@ -336,8 +336,9 @@ export function ReportViewer({
                                   <span className="text-[9px] font-bold text-[var(--text-muted)] opacity-40">{formatDateTime(f.asked_at)}</span>
                                 </div>
                                 <h3 className="text-lg font-bold text-[var(--text-strong)] leading-relaxed">{f.question}</h3>
-                                <div className="text-sm leading-7 text-[var(--text-muted)] bg-[var(--surface-paper)]/50 p-6 rounded-2xl border border-[var(--border-subtle)]/40 italic">
-                                  &quot;{f.answer}&quot;
+                                <div className="text-base leading-relaxed text-[var(--text-strong)] bg-[var(--surface-paper)] p-8 sm:p-10 rounded-[32px] border border-[var(--border-subtle)] shadow-sm relative overflow-hidden group/answer">
+                                  <div className="absolute top-0 left-0 w-1.5 h-full bg-[var(--accent)] opacity-20 group-hover/answer:opacity-40 transition-opacity" />
+                                  {f.answer}
                                 </div>
 
                                 {/* Evidence Toggle Button */}

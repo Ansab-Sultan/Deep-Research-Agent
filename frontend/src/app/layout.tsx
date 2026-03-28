@@ -17,7 +17,7 @@ const fraunces = Fraunces({
 
 export const metadata: Metadata = {
   title: "Deep Research Agent",
-  description: "Professional research workspace for live agent runs, report reading, and grounded follow-ups.",
+  description: "An open-source, AI-powered research assistant designed to perform comprehensive, multi-step investigations.",
 };
 
 export default function RootLayout({
