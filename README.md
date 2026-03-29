@@ -11,7 +11,10 @@ Deep Research Agent is an open-source, AI-powered research assistant designed to
 
 ## Demo
 
-<video src="https://raw.githubusercontent.com/Ansab-Sultan/Deep-Research-Agent/main/assets/demo-video.webm" controls="controls" width="100%"></video>
+[![Watch the Demo](https://img.shields.io/badge/Demo-Watch%20Video-red?style=for-the-badge&logo=youtube)](https://github.com/Ansab-Sultan/Deep-Research-Agent/blob/main/assets/demo-video.webm)
+
+> [!NOTE]
+> The video may not play directly in the README due to its file size (47MB). You can view it by clicking the badge above or navigating to the `assets` folder.
 
 ## Key Features
 
