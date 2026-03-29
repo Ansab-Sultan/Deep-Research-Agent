@@ -9,13 +9,6 @@
 
 Deep Research Agent is an open-source, AI-powered research assistant designed to perform comprehensive, multi-step investigations. Utilizing a hybrid architecture with a robust FastAPI backend and a responsive Next.js frontend, it leverages advanced language models and vector search to synthesize precise, reliable findings from the web and internal documents.
 
-## Demo
-
-[![Watch the Demo](https://img.shields.io/badge/Demo-Watch%20Video-red?style=for-the-badge&logo=youtube)](https://github.com/Ansab-Sultan/Deep-Research-Agent/blob/main/assets/demo-video.webm)
-
-> [!NOTE]
-> The video may not play directly in the README due to its file size (47MB). You can view it by clicking the badge above or navigating to the `assets` folder.
-
 ## Key Features
 
 - **Automated Research Pipelines:** Executes complex, iterative research tasks autonomously using LangGraph.
