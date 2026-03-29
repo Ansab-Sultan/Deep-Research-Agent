@@ -1,0 +1,354 @@
+{
+	"info": {
+		"_postman_id": "8b52f6c0-6d98-4823-b4c4-5a91f36362fc",
+		"name": "Open Deep Research Agent Backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "[01] Research",
+			"item": [
+				{
+					"name": "Submit Research",
+					"request": {
+						"method": "POST",
+						"description": "Initiates a new research job for a given topic and depth. Runs in the background and returns a job_id.",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"topic\": \"Quantum Computing\",\n    \"depth\": \"standard\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/research",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"research"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Job Status",
+					"request": {
+						"method": "GET",
+						"description": "Retrieves the current status and progress of a research job.",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/research/:job_id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"research",
+								":job_id"
+							],
+							"variable": [
+								{
+									"key": "job_id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Stream Research",
+					"request": {
+						"method": "GET",
+						"description": "Provides a Server-Sent Events (SSE) stream for real-time research progress updates.",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/research/:job_id/stream",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"research",
+								":job_id",
+								"stream"
+							],
+							"variable": [
+								{
+									"key": "job_id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ask Followup",
+					"request": {
+						"method": "POST",
+						"description": "Allows asking a follow-up question based on the completed research report.",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"question\": \"Explain the main advantages of this technology.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/research/:job_id/followup",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"research",
+								":job_id",
+								"followup"
+							],
+							"variable": [
+								{
+									"key": "job_id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Chunks",
+					"request": {
+						"method": "GET",
+						"description": "Retrieves the data chunks or knowledge segments extracted during the research for inspection.",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/research/:job_id/chunks",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"research",
+								":job_id",
+								"chunks"
+							],
+							"variable": [
+								{
+									"key": "job_id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Chunk Detail",
+					"request": {
+						"method": "GET",
+						"description": "Fetch detailed content and metadata for a specific research chunk.",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/research/:job_id/chunks/:chunk_id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"research",
+								":job_id",
+								"chunks",
+								":chunk_id"
+							],
+							"variable": [
+								{
+									"key": "job_id",
+									"value": ""
+								},
+								{
+									"key": "chunk_id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "[02] History",
+			"item": [
+				{
+					"name": "Get History List",
+					"request": {
+						"method": "GET",
+						"description": "Lists all previously completed research reports with summary information.",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/history",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"history"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get History Detail",
+					"request": {
+						"method": "GET",
+						"description": "Retrieves the full research report and its history for a specific job.",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/history/:job_id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"history",
+								":job_id"
+							],
+							"variable": [
+								{
+									"key": "job_id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "[03] Jobs",
+			"item": [
+				{
+					"name": "List Jobs",
+					"request": {
+						"method": "GET",
+						"description": "Lists all research jobs (active and completed) currently in the system.",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/jobs",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"jobs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Job Detail",
+					"request": {
+						"method": "GET",
+						"description": "Provides comprehensive details about a specific job, including its internal state.",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/jobs/:job_id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"jobs",
+								":job_id"
+							],
+							"variable": [
+								{
+									"key": "job_id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Job",
+					"request": {
+						"method": "DELETE",
+						"description": "Permanently removes a research job and its associated data from the system.",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/jobs/:job_id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"jobs",
+								":job_id"
+							],
+							"variable": [
+								{
+									"key": "job_id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "[04] Health",
+			"item": [
+				{
+					"name": "Check Health",
+					"request": {
+						"method": "GET",
+						"description": "Checks the operational status of the backend, including database, LLM provider, and embedding services.",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/health",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"health"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000"
+		},
+		{
+			"key": "user_token",
+			"value": ""
+		},
+		{
+			"key": "admin_token",
+			"value": ""
+		}
+	]
+}
