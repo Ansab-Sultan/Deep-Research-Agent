@@ -11,8 +11,7 @@ Deep Research Agent is an open-source, AI-powered research assistant designed to
 
 ## Demo
 
-<video src="./assets/demo-video.webm" controls="controls" width="100%">
-</video>
+<video src="./assets/demo-video.webm" controls="controls" width="100%"> </video>
 
 ## Key Features
 
